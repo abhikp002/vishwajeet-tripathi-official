@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import {
   Megaphone,
   Flame,
@@ -36,8 +37,146 @@ import {
   CheckCircle,
   MessageSquareQuote,
   Shield,
-  Briefcase
+  Briefcase,
+  Images
 } from 'lucide-react';
+
+interface RecentNewsItem {
+  id: string;
+  category: string;
+  badgeBg: string;
+  titleHi: string;
+  titleEn: string;
+  snippetHi: string;
+  snippetEn: string;
+  image: string;
+}
+
+const RECENT_NEWS: RecentNewsItem[] = [
+  {
+    id: 'news-recent-1',
+    category: 'जनहित व राजनीतिक संवाद',
+    badgeBg: 'bg-red-600 text-white',
+    titleHi: 'यूपी: पार्षद ने सांसद रवि किशन को घेरा, वीडियो वायरल; तावड़े ने दिल्ली बुलाया, अखिलेश बोले-बनेगी सपा सरकार',
+    titleEn: 'Video Viral: Corporator Confronts MP Ravi Kishan Over Waterlogging; Tawde Calls to Delhi',
+    snippetHi: 'शहर में बारिश से जलभराव पर भाजपा पार्षद विश्वजीत त्रिपाठी और सदर सांसद के बीच बातचीत का वीडियो वायरल। प्रदेश प्रभारी विनोद तावड़े ने पार्षद से फोन कर बातचीत की और दिल्ली बुलाया। सपा मुखिया अखिलेश यादव का भी बयान सामने आया।',
+    snippetEn: 'Following the viral video of Corporator Vishwajeet Tripathi confronting MP Ravi Kishan over severe city waterlogging, BJP State Incharge Vinod Tawde engaged the corporator for dialogue in Delhi.',
+    image: '/assets/news/news-viral-video-ravi-kishan-tawde-akhilesh.png',
+  },
+  {
+    id: 'news-recent-2',
+    category: 'जनहित व जलभराव',
+    badgeBg: 'bg-rose-600 text-white',
+    titleHi: "गोरखपुर: सांसद रविकिशन ने पार्षद को फोन कर पूछा- 'सपा ज्वाइन कई लेहला का?'",
+    titleEn: 'Gorakhpur: Fiery Phone Debate Between MP Ravi Kishan and Corporator Vishwajeet Tripathi',
+    snippetHi: 'गोरखपुर में भारी बारिश के बाद जलभराव पर बेतियाहाता वार्ड के पार्षद विश्वजीत त्रिपाठी ने सांसद रवि किशन को फोन कर शहर के विकट हालातों की जानकारी दी और जल निकासी पर तीखी नोकझोंक हुई।',
+    snippetEn: 'Corporator Vishwajeet Tripathi called MP Ravi Kishan regarding severe urban waterlogging and drainage issues, leading to an intense exchange on public accountability.',
+    image: '/assets/news/news-abp-ravi-kishan-phone-debate-waterlogging.png',
+  },
+  {
+    id: 'news-1',
+    category: 'जल निकासी व ड्रेनेज',
+    badgeBg: 'bg-blue-600 text-white',
+    titleHi: 'एक जाली ने बढ़ाई दस वार्डों की मुश्किलें, समय पर फैसले से मिली राहत',
+    titleEn: 'Prompt Action at Padleyganj Drain Mesh Brings Relief to Ten Wards',
+    snippetHi: 'पैडलेगंज गौतम बुद्ध द्वार के पास नाले पर लगी जाली से जल निकासी अवरुद्ध होने पर पार्षद विश्वजीत त्रिपाठी और रितेश सिंह ने मौके पर पहुंचकर अधिकारियों को स्थिति से अवगत कराया और जाली हटवाकर दस वार्डों को जलभराव से मुक्ति दिलाई।',
+    snippetEn: 'Corporator Vishwajeet Tripathi inspected the choked drain mesh near Padleyganj with officials, getting the obstruction cleared to resolve waterlogging across ten wards.',
+    image: '/assets/news/743081800_27085368861146189_4660532069274368196_n.jpg',
+  },
+  {
+    id: 'news-2',
+    category: 'सांस्कृतिक व धरोहर',
+    badgeBg: 'bg-amber-600 text-white',
+    titleHi: 'तेरह साल बाद पुस्तकालय को मिला राहुल सांकृत्यायन का नाम',
+    titleEn: 'Historic Municipal E-Library Named After Rahul Sankrityayan After 13 Years',
+    snippetHi: 'नगर निगम सदन की बैठक में पार्षद विश्वजीत त्रिपाठी ने ऐतिहासिक ई-लाइब्रेरी पर महापंडित राहुल सांकृत्यायन का नाम अंकित कराने का मुद्दा मजबूती से उठाया, जिसके बाद साइनबोर्ड लगाकर नाम स्थापित किया गया।',
+    snippetEn: 'In the Municipal Corporation House, Corporator Vishwajeet Tripathi forcefully championed naming the historic e-library after Mahapandit Rahul Sankrityayan.',
+    image: '/assets/news/795332593_27852400004443067_3113860931798894358_n.jpg',
+  },
+  {
+    id: 'news-3',
+    category: 'सड़क व अवसंरचना',
+    badgeBg: 'bg-emerald-600 text-white',
+    titleHi: 'चर्चा में रही बेतियाहाता की सड़क भी बनेगी',
+    titleEn: '₹1.02 Crore Approved for Betiyahata Road After Ground Demonstration',
+    snippetHi: 'पार्षद विश्वजीत त्रिपाठी द्वारा बारिश के बाद जलमग्न सड़क के बीच बैठकर किए गए जोरदार प्रदर्शन के बाद फलमंडी पुलिस चौकी से राजीव नगर तक 500 मीटर सड़क निर्माण हेतु 1.02 करोड़ रुपये की स्वीकृति मिली।',
+    snippetEn: 'Following Corporator Vishwajeet Tripathi\'s direct on-ground protest in waterlogged streets, ₹1.02 crore was sanctioned for constructing the 500m road from Fruit Market to Rajiv Nagar.',
+    image: '/assets/news/WhatsApp Image 2026-09-24 at 16.14.13.jpeg',
+  },
+  {
+    id: 'news-4',
+    category: 'सड़क व अवसंरचना',
+    badgeBg: 'bg-emerald-600 text-white',
+    titleHi: '2.24 करोड़ से बहुरेंगे हरिहर प्रसाद दुबे मार्ग के दिन',
+    titleEn: '₹2.24 Crore Sanctioned for Harihar Prasad Dubey Marg Reconstruction',
+    snippetHi: 'रुस्तमपुर ढाले से आंबेडकर चौराहे तक अत्यंत जर्जर हरिहर प्रसाद दुबे मार्ग के निर्माण हेतु क्षेत्रीय पार्षद विश्वजीत त्रिपाठी के सदन और सड़क पर निरंतर संघर्ष के बाद 2.24 करोड़ रुपये की वित्तीय स्वीकृति मिली।',
+    snippetEn: 'Persistent advocacy and protests by Corporator Vishwajeet Tripathi led to the approval of ₹2.24 crore for the reconstruction of Harihar Prasad Dubey Marg from Rustampur to Ambedkar Chowk.',
+    image: '/assets/news/WhatsApp Image 2026-09-24 at 16.18.42 (1).jpeg',
+  },
+];
+
+const HOMEPAGE_GALLERY = [
+  {
+    id: 'hgal-1',
+    image: '/assets/news/743081800_27085368861146189_4660532069274368196_n.jpg',
+    source: 'अमर उजाला / राष्ट्रीय मीडिया साक्ष्य',
+    tag: 'जलभराव सत्याग्रह',
+    titleHi: 'बेतियाहाता नाले की आरती व ऐतिहासिक जलभराव आंदोलन',
+    titleEn: 'Betiyahata Nala Aarti & Historic Drainage Agitation',
+    descHi: 'मानसून में जब पूरा बेतियाहाता जलमग्न हुआ, तब सोनू तिवारी ने नाले में खड़े होकर नमामि नाला आरती की।',
+    descEn: 'Sonu Tiwari performed Nala Aarti in flooded drain, prompting immediate municipal desilting.',
+  },
+  {
+    id: 'hgal-2',
+    image: '/assets/news/795332593_27852400004443067_3113860931798894358_n.jpg',
+    source: 'दैनिक जागरण मुख्य रिपोर्ट',
+    tag: 'प्रशासनिक जवाबदेही',
+    titleHi: 'उपनगर आयुक्त के खिलाफ खुला मोर्चा व कोतवाली में मांग',
+    titleEn: 'Protest Against Deputy Municipal Commissioner for Neglect',
+    descHi: 'वार्ड 26 की समस्याओं की अनदेखी पर कोतवाली में मुकदमा दर्ज कराने की मांग को लेकर ऐतिहासिक धरना।',
+    descEn: 'Historical protest and formal complaint at city police station against administrative apathy.',
+  },
+  {
+    id: 'hgal-3',
+    image: '/assets/news/814629880_27832202283129506_40090162660360342_n.jpg',
+    source: 'अमर उजाला फ्रंट पेज हेडलाइन',
+    tag: 'जनस्वास्थ्य सुरक्षा',
+    titleHi: 'वार्ड में एक मशीन के ही भरोसे हो रही फॉगिंग की पड़ताल',
+    titleEn: 'Investigative Report on Fogging Machinery Shortage',
+    descHi: 'डेंगू-मलेरिया सीजन में मात्र एक खराब मशीन के भरोसे खानापूर्ति की अमर उजाला द्वारा पड़ताल।',
+    descEn: 'Front-page investigation exposing single fogging machine for entire municipal ward.',
+  },
+  {
+    id: 'hgal-4',
+    image: '/assets/news/WhatsApp Image 2026-09-24 at 16.14.13.jpeg',
+    source: 'दैनिक जागरण समाचार साक्ष्य',
+    tag: 'ड्रेनेज व जल-निकासी',
+    titleHi: 'वार्ड 26 में ड्रेनेज निर्माण व जलभराव की स्थायी कार्ययोजना',
+    titleEn: 'Permanent Drainage Infrastructure Plan for Ward 26',
+    descHi: 'सत्याग्रह के बाद नगर निगम द्वारा बेतियाहाता-माधोपुर में नाला निर्माण की स्वीकृति।',
+    descEn: 'Municipal sanction for comprehensive drainage infrastructure following citizen agitation.',
+  },
+  {
+    id: 'hgal-5',
+    image: '/assets/news/WhatsApp Image 2026-09-24 at 16.18.42 (1).jpeg',
+    source: 'नगर निगम सदन आर्काइव',
+    tag: 'सदन में दहाड़',
+    titleHi: '28 सड़कों के नामकरण व वार्ड विकास निधि पर सदन में बहस',
+    titleEn: 'Vocal Council Stance on Road Naming & Equitable Ward Budget',
+    descHi: 'नगर निगम की बोर्ड बैठक में 28 सड़कों के नामकरण में भेदभाव पर कड़ा विरोध दर्ज कराया।',
+    descEn: 'Advocating for fair distribution of infrastructure projects and equal ward rights.',
+  },
+  {
+    id: 'hgal-6',
+    image: '/assets/news/WhatsApp Image 2026-09-24 at 19.18.47.jpeg',
+    source: 'कार्ययोजना व बजट साक्ष्य',
+    tag: 'धरातल पर विकास',
+    titleHi: '₹2.24 Cr हरिहर प्रसाद दुबे मार्ग व अमृत सरोवर निर्माण योजना',
+    titleEn: 'Documentation of ₹2.24 Cr Harihar Prasad Dubey Marg',
+    descHi: 'माधोपुर और बेतियाहाता को जोड़ने वाले प्रमुख मार्ग व जल निकासी के कायाकल्प की स्वीकृति।',
+    descEn: 'Sanction and budget documentation for key road reconstruction and drainage improvement.',
+  },
+];
 
 export default function HomePage() {
   const [lang, setLang] = useState<'hi' | 'en'>('hi');
@@ -62,12 +201,11 @@ export default function HomePage() {
       fbFollowers: "15K+ फेसबुक समर्थक",
       reportIssue: "सुझाव / शिकायत पेटी",
       name: "विश्वजीत त्रिपाठी 'सोनू'",
-      titleBadge: "पार्षद, वार्ड 322",
-      role: "पार्षद - नगर निगम गोरखपुर | वार्ड 322 (माधोपुर - बेतियाहाता)",
+      titleBadge: "पार्षद, वार्ड 26",
+      role: "पार्षद - नगर निगम गोरखपुर | वार्ड 26 (माधोपुर - बेतियाहाता)",
       nav: {
         home: "मुख्य पृष्ठ",
         bio: "जीवन परिचय",
-        struggles: "संघर्ष व जन-मुद्दे",
         works: "विकास कार्य",
         media: "अखबारों में",
         gallery: "फोटो गैलरी",
@@ -75,18 +213,18 @@ export default function HomePage() {
       },
       hero: {
         badge: "जन-सेवा • निष्पक्षता • विकास",
-        tag: "जन-सेवा एवं सामाजिक सरोकार • वार्ड 322 (माधोपुर - बेतियाहाता)",
+        tag: "जन-सेवा एवं सामाजिक सरोकार • वार्ड 26 (माधोपुर - बेतियाहाता)",
         h1Line1: "अन्याय के खिलाफ,",
         h1Line2: "जनता के साथ।",
         h2: "पार्षद विश्वजीत त्रिपाठी 'सोनू'",
-        p: "नगर निगम में भ्रष्टाचार के खिलाफ बुलंद आवाज, वार्ड 322 (माधोपुर - बेतियाहाता) की हर गली-मोहल्ले की समस्याओं के त्वरित समाधान और आम नागरिक के हक व सम्मान के लिए निरंतर सेवारत।",
-        cta1: "प्रमुख संघर्ष देखें",
+        p: "नगर निगम में भ्रष्टाचार के खिलाफ बुलंद आवाज, वार्ड 26 (माधोपुर - बेतियाहाता) की हर गली-मोहल्ले की समस्याओं के त्वरित समाधान और आम नागरिक के हक व सम्मान के लिए निरंतर सेवारत।",
+        cta1: "प्रमुख विकास कार्य देखें",
         cta2: "समस्या / सुझाव दर्ज करें",
         fbVerified: "15,000+ से अधिक सक्रिय समर्थक एवं नागरिक जुड़ाव",
         quote: "मेरे लिए राजनीति पद पाने का साधन नहीं, बल्कि अंतिम पंक्ति के नागरिक के सम्मान व अधिकारों की रक्षा का माध्यम है।",
         cardBadge1: "निष्पक्ष जन-प्रतिनिधि",
-        cardBadge2: "वार्ड 322 गोरखपुर",
-        sealWard: "वार्ड 322",
+        cardBadge2: "वार्ड 26 गोरखपुर",
+        sealWard: "वार्ड 26",
         sealCity: "गोरखपुर",
         sealRole: "पार्षद कार्यालय",
       },
@@ -108,10 +246,10 @@ export default function HomePage() {
         tag: "व्यक्तिगत परिचय व दृष्टिकोण",
         title: "गोरखपुर की माटी से उपजा, जनता का सच्चा सेवक",
         nameFull: "विश्वजीत त्रिपाठी (सोनू तिवारी)",
-        roleTag: "पार्षद, वार्ड 322 (माधोपुर - बेतियाहाता)",
+        roleTag: "पार्षद, वार्ड 26 (माधोपुर - बेतियाहाता)",
         p1: "गोरखपुर शहर के बेतियाहाता और माधोपुर की गलियों में पले-बढ़े विश्वजीत त्रिपाठी 'सोनू' छात्र जीवन से ही जन-सरोकारों, सामाजिक न्याय और अन्याय के खिलाफ मुखर रहे हैं।",
         p2: "उन्होंने अपनी प्रारंभिक व माध्यमिक शिक्षा गोरखपुर के प्रतिष्ठित एम.जी. इंटर कॉलेज (M.G. Inter College Gorakhpur) से पूर्ण की और तत्पश्चात दीनदयाल उपाध्याय गोरखपुर विश्वविद्यालय (D.D.U. Gorakhpur) से उच्च शिक्षा प्राप्त की। युवावस्था से ही वे सामाजिक कार्यों व नागरिक समस्याओं के निवारण हेतु सक्रिय रहे हैं।",
-        p3: "नगर निगम गोरखपुर के वार्ड 322 (माधोपुर - बेतियाहाता) से पार्षद निर्वाचित होने के बाद वे बिना किसी पूर्वाग्रह के निष्पक्ष भाव से केवल जनता के हक, जलभराव से मुक्ति, सफाई, प्रकाश और विकास के लिए समर्पित हैं।",
+        p3: "नगर निगम गोरखपुर के वार्ड 26 (माधोपुर - बेतियाहाता) से पार्षद निर्वाचित होने के बाद वे बिना किसी पूर्वाग्रह के निष्पक्ष भाव से केवल जनता के हक, जलभराव से मुक्ति, सफाई, प्रकाश और विकास के लिए समर्पित हैं।",
         eduLabel: "शिक्षा संस्थान:",
         eduValue: "M.G. Inter College & D.D.U. गोरखपुर विश्वविद्यालय",
         ideologyLabel: "कार्यशैली:",
@@ -123,38 +261,9 @@ export default function HomePage() {
         pillar2: "जमीनी मौजूदगी: हर जलभराव, संक्रामक रोग या संकट के समय खुद मौके पर उपस्थिति।",
         pillar3: "पारदर्शिता: नगर निगम के विकास कार्यों पर 'जनता ऑडिट' और गुणवत्ता की सतत निगरानी।",
       },
-      struggles: {
-        tag: "वास्तविक दस्तावेजी साक्ष्य एवं जन-आंदोलन",
-        title: "संघर्ष और जन-मुद्दे: अखबारों की सुर्खियां गवाह हैं",
-        sub: "सिर्फ वादे नहीं, जमीन पर लड़े गए 6 ऐतिहासिक संघर्ष जिनके साक्ष्य समाचार पत्रों में दर्ज हैं",
-        c1Tag: "1. ऐतिहासिक जन-आंदोलन • प्रदेश भर में गूंज",
-        c1Title: "बेतियाहाता नाला जलभराव - नाले की आरती",
-        c1Desc: "मानसून में जब पूरा बेतियाहाता जलमग्न हो गया और प्रशासन उदासीन रहा, तब सोनू तिवारी ने नाले में खड़े होकर 'नमामि नाला आरती' की। इस अनोखे और साहसिक विरोध की गूंज पूरे प्रदेश व राष्ट्रीय मीडिया में छाई और प्रशासन को तत्काल काम शुरू करना पड़ा।",
-        c1Proof: "साक्ष्य: अमर उजाला, राष्ट्रीय मीडिया व वीडियो आर्काइव",
-        c2Tag: "2. अफसरों की जवाबदेही",
-        c2Title: "उपनगर आयुक्त के खिलाफ खुला मोर्चा",
-        c2Desc: "जनता की समस्याओं की अनदेखी पर उपनगर आयुक्त के खिलाफ कोतवाली में मुकदमा दर्ज कराने की मांग को लेकर ऐतिहासिक धरना दिया। सभी जन-प्रतिनिधियों ने एकजुट होकर सोनू तिवारी को समर्थन दिया।",
-        c2Proof: "साक्ष्य: दैनिक जागरण, अमर उजाला व कोतवाली अभिलेख",
-        c3Tag: "3. जन-स्वास्थ्य सुरक्षा",
-        c3Title: "फॉगिंग घोटाला - 'एक मशीन के ही भरोसे फॉगिंग'",
-        c3Desc: "अमर उजाला की मुख्य हेडलाइन बनी जब सोनू तिवारी ने खुलासा किया कि पूरे वार्ड में डेंगू-मलेरिया से बचाव के लिए मात्र एक खराब मशीन के भरोसे खानापूर्ति की जा रही थी। विरोध के बाद नई मशीनें आवंटित हुईं।",
-        c3Proof: "हेडलाइन: अमर उजाला ग्राउंड पड़ताल",
-        c4Tag: "4. सदन में दहाड़",
-        c4Title: "नगर निगम बोर्ड बैठक में हंगामा: 28 सड़कों का मुद्दा",
-        c4Desc: "नगर निगम की महत्वपूर्ण बोर्ड बैठक में 28 सड़कों के नामकरण में भेदभाव और अनियमितता पर सोनू तिवारी ने पुरजोर विरोध दर्ज कराया और वार्डों के हक की जोरदार वकालत की।",
-        c4Proof: "साक्ष्य: नगर निगम सदन कार्यवृत्त व दैनिक समाचार पत्र",
-        c5Tag: "5. सामाजिक सरोकार",
-        c5Title: "वरिष्ठ नागरिक सम्मान समारोह - मोहद्दीपुर व बोधघाट",
-        c5Desc: "मोहद्दीपुर स्थित वृद्धाश्रम एवं प्रेमचंद पार्क बोधघाट में भव्य वरिष्ठ नागरिक सम्मान समारोह का आयोजन कर बुजुर्गों का आशीर्वाद लिया गया। अखबारों ने लिखा- 'सम्मान पाकर खिल उठे वरिष्ठजनों के चेहरे'!",
-        c5Proof: "साक्ष्य: दैनिक जागरण व स्थानीय संस्करण",
-        c6Tag: "6. धरातल पर विकास",
-        c6Title: "₹2.24 करोड़ से संवरेगा हरीर प्रसाद दुबे मार्ग व अमृत सरोवर",
-        c6Desc: "लंबे संघर्ष के बाद ₹2.24 करोड़ की लागत से हरीर प्रसाद दुबे मार्ग का नवनिर्माण तथा क्षेत्र में अमृत सरोवर का सौंदर्यीकरण स्वीकृत कराया गया, जिससे हजारों स्थानीय निवासियों को सीधा लाभ मिल रहा है।",
-        c6Proof: "साक्ष्य: नगर निगम कार्ययोजना व बजट स्वीकृति",
-      },
       works: {
         tag: "विकास के मील के पत्थर",
-        title: "वार्ड 322 में प्रमुख विकास कार्य",
+        title: "वार्ड 26 में प्रमुख विकास कार्य",
         sub: "सड़क, नाली, प्रकाश और जन-स्वास्थ्य - हर योजना पर जनता की सीधी निगरानी",
         w1Status: "स्वीकृत व प्रगति पर",
         w1Budget: "लागत: ₹2.24 Cr",
@@ -162,7 +271,7 @@ export default function HomePage() {
         w1Desc: "माधोपुर और बेतियाहाता को जोड़ने वाले प्रमुख संपर्क मार्ग का चौड़ीकरण, इंटरलॉकिंग, आरसीसी नाला और अमृत सरोवर का समग्र कायाकल्प।",
         w1Note: "गुणवत्ता व समयसीमा की प्रत्यक्ष निगरानी",
         w2Status: "धरातल पर क्रियान्वयन",
-        w2Tag: "वार्ड 322",
+        w2Tag: "वार्ड 26",
         w2Title: "नाली-जाल, ड्रेनेज व जल निकासी तंत्र",
         w2Desc: "बेतियाहाता व माधोपुर के मुख्य नाले की सिल्ट सफाई, नए ढक्कन लगाना तथा मानसून से पहले जलभराव से मुक्ति हेतु युद्धस्तर पर कार्य।",
         w2Note: "नागरिक शिकायत पर त्वरित कार्रवाई",
@@ -177,16 +286,18 @@ export default function HomePage() {
         auditBtn: "घटिया निर्माण की शिकायत दर्ज करें",
       },
       media: {
-        tag: "अखबारों में गूंज",
+        tag: "राष्ट्रीय व प्रांतीय मीडिया में गूंज",
         title: "प्रमुख समाचार पत्रों में प्रकाशित सुर्खियां",
-        sub: "अमर उजाला, दैनिक जागरण, हिंदुस्तान में प्रकाशित वास्तविक रिपोर्ट व साक्ष्य",
-        viewClipping: "अखबार कटिंग देखें",
+        sub: "अमर उजाला, दैनिक जागरण, हिंदुस्तान, दैनिक भास्कर व राष्ट्रीय सहारा में प्रकाशित वास्तविक समाचार कतरनें एवं साक्ष्य",
+        viewClipping: "देखें",
+        readStory: "विस्तृत विवरण देखें",
       },
       gallery: {
-        tag: "छायाचित्र एवं दस्तावेज",
+        tag: "छायाचित्र एवं दस्तावेजी साक्ष्य",
         title: "फोटो गैलरी: जन-आंदोलन एवं साक्ष्य",
-        sub: "ओरिजिनल अखबार की कटिंग व तस्वीरें बड़े आकार में देखने के लिए क्लिक करें",
+        sub: "अमर उजाला व दैनिक जागरण में प्रकाशित ओरिजिनल अखबार की कटिंग व तस्वीरें बड़े आकार में देखने के लिए क्लिक करें",
         zoomBtn: "बड़ा देखें",
+        viewAllBtn: "पूरी फोटो गैलरी व सभी साक्ष्य देखें (View All Photos)",
       },
       contact: {
         tag: "सुझाव व समस्या निवारण",
@@ -194,7 +305,7 @@ export default function HomePage() {
         sub: "माधोपुर और बेतियाहाता के हर नागरिक की समस्या का त्वरित समाधान हमारा संकल्प है",
         officeHeading: "पार्षद कार्यालय विवरण",
         addressLabel: "कार्यालय पता:",
-        addressValue: "वार्ड 322 (माधोपुर - बेतियाहाता), नगर निगम गोरखपुर, उत्तर प्रदेश - 273001",
+        addressValue: "वार्ड 26 (माधोपुर - बेतियाहाता), नगर निगम गोरखपुर, उत्तर प्रदेश - 273001",
         timingsLabel: "जन-सुनवाई समय:",
         timingsValue: "प्रतिदिन प्रातः 08:00 बजे से 10:00 बजे तक (कार्यालय में प्रत्यक्ष मुलाकात)",
         fbLabel: "आधिकारिक फेसबुक:",
@@ -217,7 +328,7 @@ export default function HomePage() {
       },
       footer: {
         title: "विश्वजीत त्रिपाठी 'सोनू'",
-        role: "पार्षद - वार्ड 322 (माधोपुर - बेतियाहाता), नगर निगम गोरखपुर (उ.प्र.)",
+        role: "पार्षद - वार्ड 26 (माधोपुर - बेतियाहाता), नगर निगम गोरखपुर (उ.प्र.)",
         tagline: "अन्याय के खिलाफ, जनता के साथ • गोरखपुर का समग्र विकास",
         copyright: "© 2025-2026 कार्यालय विश्वजीत त्रिपाठी (सोनू तिवारी). सर्वाधिकार सुरक्षित।",
         city: "नगर निगम गोरखपुर • शाहर विधानसभा 322",
@@ -229,12 +340,11 @@ export default function HomePage() {
       fbFollowers: "15K+ Facebook Community",
       reportIssue: "Suggestion / Grievance Box",
       name: "Vishwajeet Tripathi 'Sonu'",
-      titleBadge: "Corporator, Ward 322",
-      role: "Corporator - Nagar Nigam Gorakhpur | Ward 322 (Madhopur - Betiyahata)",
+      titleBadge: "Corporator, Ward 26",
+      role: "Corporator - Nagar Nigam Gorakhpur | Ward 26 (Madhopur - Betiyahata)",
       nav: {
         home: "Home",
         bio: "Biography",
-        struggles: "Struggles & Issues",
         works: "Development",
         media: "In Media",
         gallery: "Photo Gallery",
@@ -242,18 +352,18 @@ export default function HomePage() {
       },
       hero: {
         badge: "PUBLIC SERVICE • INTEGRITY • PROGRESS",
-        tag: "Dedicated to Public Service • Ward 322 (Madhopur - Betiyahata)",
+        tag: "Dedicated to Public Service • Ward 26 (Madhopur - Betiyahata)",
         h1Line1: "Against Injustice,",
         h1Line2: "With the People.",
         h2: "Corporator Vishwajeet Tripathi 'Sonu'",
-        p: "A fearless voice against civic irregularities, dedicated to the prompt resolution of grassroots challenges in Ward 322 (Madhopur - Betiyahata) and safeguarding citizens' rights and dignity.",
-        cta1: "View Major Struggles",
+        p: "A fearless voice against civic irregularities, dedicated to the prompt resolution of grassroots challenges in Ward 26 (Madhopur - Betiyahata) and safeguarding citizens' rights and dignity.",
+        cta1: "View Development Works",
         cta2: "Submit Grievance / Suggestion",
         fbVerified: "15,000+ Active Followers & Citizens Connected",
         quote: "For me, public service is not about holding office; it is about standing with the last person in the queue and protecting their dignity and rights.",
         cardBadge1: "Independent Representative",
-        cardBadge2: "Ward 322 Gorakhpur",
-        sealWard: "Ward 322",
+        cardBadge2: "Ward 26 Gorakhpur",
+        sealWard: "Ward 26",
         sealCity: "Gorakhpur",
         sealRole: "Office of Corporator",
       },
@@ -275,10 +385,10 @@ export default function HomePage() {
         tag: "Personal Biography & Vision",
         title: "Rooted in Gorakhpur, Dedicated to Public Service",
         nameFull: "Vishwajeet Tripathi (Sonu Tiwari)",
-        roleTag: "Corporator, Ward 322 (Madhopur - Betiyahata)",
+        roleTag: "Corporator, Ward 26 (Madhopur - Betiyahata)",
         p1: "Born and raised in the historic neighbourhoods of Betiyahata and Madhopur in Gorakhpur, Vishwajeet Tripathi aka 'Sonu' has been at the forefront of social justice, public grievance redressal, and standing up against unfair practices since his student years.",
         p2: "He completed his education from the renowned M.G. Inter College Gorakhpur and pursued higher studies at Deen Dayal Upadhyaya Gorakhpur University (D.D.U.). Since his youth, he has remained actively engaged in community welfare and civic development.",
-        p3: "As the elected Corporator for Ward 322 (Madhopur - Betiyahata), he works with complete dedication—focusing purely on citizen welfare, flood relief, sanitation, street lighting, and transparent governance.",
+        p3: "As the elected Corporator for Ward 26 (Madhopur - Betiyahata), he works with complete dedication—focusing purely on citizen welfare, flood relief, sanitation, street lighting, and transparent governance.",
         eduLabel: "Alma Mater:",
         eduValue: "M.G. Inter College & D.D.U. Gorakhpur University",
         ideologyLabel: "Working Ethos:",
@@ -290,38 +400,9 @@ export default function HomePage() {
         pillar2: "Ground Presence: Personally present on site during floods, health emergencies, and civic crises.",
         pillar3: "Total Transparency: Citizen audit on civic development works and budget execution.",
       },
-      struggles: {
-        tag: "Documented Proof & Movements",
-        title: "Struggles & Movements: Documented in Press",
-        sub: "Not mere promises—6 documented real battles with verifiable newspaper headlines and public records",
-        c1Tag: "1. Historic Movement • State-Wide Attention",
-        c1Title: "Betiyahata Drainage Crisis - Aarti of the Drain",
-        c1Desc: "When heavy monsoon water inundated Betiyahata and civic authorities turned a blind eye, Sonu Tiwari stepped directly into the filthy flooded drain and performed 'Namami Nala Aarti'. The unique protest captured state-wide attention, compelling the administration to commence immediate desilting.",
-        c1Proof: "Proof: Amar Ujala, National Media & Video Archives",
-        c2Tag: "2. Bureaucratic Accountability",
-        c2Title: "Protest Against Deputy Municipal Commissioner",
-        c2Desc: "Demanded an FIR at the police station against administrative apathy towards public issues by municipal officials. Received unified support from diverse councilors across wards.",
-        c2Proof: "Proof: Dainik Jagran, Amar Ujala & Police Station Records",
-        c3Tag: "3. Public Health Protection",
-        c3Title: "Fogging Scam - 'Ward Reliant on Just One Machine'",
-        c3Desc: "Became the front-page headline of Amar Ujala when Sonu Tiwari exposed that during peak dengue season, the civic body was pretending to fog the entire ward with just a single malfunctioning machine. New machines were sanctioned after his protest.",
-        c3Proof: "Headline: Amar Ujala Ground Investigation",
-        c4Tag: "4. Council Debate",
-        c4Title: "Board Meeting Uproar: The 28 Roads Naming Issue",
-        c4Desc: "Stood up firmly in the municipal council board meeting against bias and irregularities in naming 28 roads, fiercely advocating for fair allocation across all civic wards.",
-        c4Proof: "Proof: Municipal Council Minutes & Daily Press",
-        c5Tag: "5. Social Responsibility",
-        c5Title: "Senior Citizens Felicitation - Mohaddipur & Bodhghat",
-        c5Desc: "Organized a grand felicitation event for senior citizens at Mohaddipur Old Age Home and Premchand Park Bodhghat. Press celebrated the initiative: 'Smiles bloom on senior citizens' faces upon receiving honor'.",
-        c5Proof: "Proof: Dainik Jagran & Regional Editions",
-        c6Tag: "6. Ground Development",
-        c6Title: "₹2.24 Crore Harir Prasad Dubey Marg & Amrit Sarovar",
-        c6Desc: "Successfully secured and approved a budget of ₹2.24 Crores for the construction and modernization of Harir Prasad Dubey Marg and beautification of the Amrit Sarovar pond.",
-        c6Proof: "Proof: Municipal Work Plan & Sanction Order",
-      },
       works: {
         tag: "Development Milestones",
-        title: "Key Infrastructure Works in Ward 322",
+        title: "Key Infrastructure Works in Ward 26",
         sub: "Roads, drainage, LED lighting, and public health—under direct citizen supervision",
         w1Status: "Sanctioned & In Progress",
         w1Budget: "Budget: ₹2.24 Cr",
@@ -329,7 +410,7 @@ export default function HomePage() {
         w1Desc: "Widening of key connector road linking Madhopur and Betiyahata, interlocking tiles, RCC storm-water drain, and ecological restoration of Amrit Sarovar.",
         w1Note: "Direct monitoring of build quality & timeline",
         w2Status: "Ground Execution",
-        w2Tag: "Ward 322",
+        w2Tag: "Ward 26",
         w2Title: "Drainage Network & Waterlogging Prevention",
         w2Desc: "Desilting of major drains in Betiyahata & Madhopur, heavy-duty covers installation, and pre-monsoon storm-water channels.",
         w2Note: "Action within 24 hours of citizen report",
@@ -344,16 +425,18 @@ export default function HomePage() {
         auditBtn: "Report Sub-Standard Construction",
       },
       media: {
-        tag: "In the Headlines",
-        title: "Press Coverage in Leading Newspapers",
-        sub: "Verifiable reports from Amar Ujala, Dainik Jagran, and Hindustan",
-        viewClipping: "View Clipping",
+        tag: "In National & Regional Press",
+        title: "Headlines in Leading Daily Newspapers",
+        sub: "Original newspaper clippings and verified reports published across Amar Ujala, Dainik Jagran, Hindustan, Dainik Bhaskar & Rashtriya Sahara",
+        viewClipping: "View",
+        readStory: "View Details",
       },
       gallery: {
         tag: "Photographic & Documentary Archive",
         title: "Photo Gallery: Movements & Press Clippings",
-        sub: "Click any image to view full-resolution scans of original newspaper clippings",
+        sub: "Click any image to view full-resolution scans of original newspaper clippings and photographic proof",
         zoomBtn: "Zoom In",
+        viewAllBtn: "View Complete Photo Gallery & Proof Archive",
       },
       contact: {
         tag: "Public Redressal & Office",
@@ -361,7 +444,7 @@ export default function HomePage() {
         sub: "Prompt resolution for every citizen of Madhopur and Betiyahata is our prime commitment",
         officeHeading: "Corporator Office Details",
         addressLabel: "Office Address:",
-        addressValue: "Ward 322 (Madhopur - Betiyahata), Nagar Nigam Gorakhpur, UP - 273001",
+        addressValue: "Ward 26 (Madhopur - Betiyahata), Nagar Nigam Gorakhpur, UP - 273001",
         timingsLabel: "Public Hearing Hours:",
         timingsValue: "Daily 08:00 AM to 10:00 AM (Direct meeting at office)",
         fbLabel: "Official Facebook:",
@@ -384,7 +467,7 @@ export default function HomePage() {
       },
       footer: {
         title: "Vishwajeet Tripathi 'Sonu'",
-        role: "Corporator - Ward 322 (Madhopur - Betiyahata), Nagar Nigam Gorakhpur (UP)",
+        role: "Corporator - Ward 26 (Madhopur - Betiyahata), Nagar Nigam Gorakhpur (UP)",
         tagline: "Against Injustice, With the People • Comprehensive Development of Gorakhpur",
         copyright: "© 2025-2026 Office of Vishwajeet Tripathi (Sonu Tiwari). All Rights Reserved.",
         city: "Nagar Nigam Gorakhpur • Assembly 322",
@@ -395,7 +478,7 @@ export default function HomePage() {
   const curr = t[lang];
 
   const handleCopyMessage = () => {
-    const textToCopy = `🚩 *GRIEVANCE REGISTRATION - WARD 322 OFFICE* 🚩
+    const textToCopy = `🚩 *GRIEVANCE REGISTRATION - WARD 26 OFFICE* 🚩
 ━━━━━━━━━━━━━━━━━━━━━━
 👤 *Citizen Name:* ${formData.name || (lang === 'hi' ? 'नागरिक' : 'Citizen')}
 📞 *Contact Phone:* ${formData.phone || 'N/A'}
@@ -403,7 +486,7 @@ export default function HomePage() {
 📌 *Issue Category:* ${formData.category}
 
 📝 *Description:*
-${formData.problem || (lang === 'hi' ? 'वार्ड 322 माधोपुर-बेतियाहाता क्षेत्र में त्वरित सुधार हेतु अनुरोध।' : 'Urgent civic assistance requested in Ward 322.')}
+${formData.problem || (lang === 'hi' ? 'वार्ड 26 माधोपुर-बेतियाहाता क्षेत्र में त्वरित सुधार हेतु अनुरोध।' : 'Urgent civic assistance requested in Ward 26.')}
 ━━━━━━━━━━━━━━━━━━━━━━
 To: Vishwajeet Tripathi 'Sonu' (Corporator, Nagar Nigam Gorakhpur)`;
 
@@ -413,12 +496,12 @@ To: Vishwajeet Tripathi 'Sonu' (Corporator, Nagar Nigam Gorakhpur)`;
   };
 
   const handleWhatsAppSend = () => {
-    const message = `🚩 *GRIEVANCE - WARD 322 (MADHOPUR - BETIYAHATA)* 🚩
+    const message = `🚩 *GRIEVANCE - WARD 26 (MADHOPUR - BETIYAHATA)* 🚩
 Name: ${formData.name || 'Citizen'}
 Phone: ${formData.phone || ''}
 Area: ${formData.mohalla}
 Category: ${formData.category}
-Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
+Details: ${formData.problem || 'Civic assistance needed in Ward 26.'}`;
     const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
   };
@@ -490,9 +573,10 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
           <nav className="hidden lg:flex items-center gap-7 text-sm font-semibold text-slate-700">
             <a href="#mukh-prishth" className="hover:text-brandRed-600 transition-colors">{curr.nav.home}</a>
             <a href="#jeevan-parichay" className="hover:text-brandRed-600 transition-colors">{curr.nav.bio}</a>
-            <a href="#sangharsh" className="hover:text-brandRed-600 transition-colors">{curr.nav.struggles}</a>
             <a href="#vikas-karya" className="hover:text-brandRed-600 transition-colors">{curr.nav.works}</a>
-            <a href="#media" className="hover:text-brandRed-600 transition-colors">{curr.nav.media}</a>
+            <Link href="/media" className="hover:text-brandRed-600 transition-colors">
+              {curr.nav.media}
+            </Link>
             <a href="#gallery" className="hover:text-brandRed-600 transition-colors">{curr.nav.gallery}</a>
             <a
               href="#jan-sampark"
@@ -526,9 +610,10 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
           <div className="lg:hidden bg-white border-t border-slate-200 px-4 py-4 space-y-3 font-semibold text-slate-800 shadow-lg">
             <a href="#mukh-prishth" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-brandRed-600 border-b border-slate-100">{curr.nav.home}</a>
             <a href="#jeevan-parichay" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-brandRed-600 border-b border-slate-100">{curr.nav.bio}</a>
-            <a href="#sangharsh" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-brandRed-600 border-b border-slate-100">{curr.nav.struggles}</a>
             <a href="#vikas-karya" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-brandRed-600 border-b border-slate-100">{curr.nav.works}</a>
-            <a href="#media" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-brandRed-600 border-b border-slate-100">{curr.nav.media}</a>
+            <Link href="/media" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-brandRed-600 border-b border-slate-100">
+              {curr.nav.media}
+            </Link>
             <a href="#gallery" onClick={() => setMobileMenuOpen(false)} className="block py-1.5 hover:text-brandRed-600 border-b border-slate-100">{curr.nav.gallery}</a>
             <a href="#jan-sampark" onClick={() => setMobileMenuOpen(false)} className="block bg-brandRed-600 text-white text-center py-2.5 rounded-lg shadow font-bold">{curr.reportIssue}</a>
           </div>
@@ -536,7 +621,7 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
       </header>
 
       {/* 3. HERO EXECUTIVE SECTION */}
-      <section id="mukh-prishth" className="pt-10 pb-16 bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200 relative overflow-hidden bg-grid-pattern">
+      <section id="mukh-prishth" className="pt-10 pb-16 bg-gradient-to-b from-white via-slate-50 to-slate-100 border-b border-slate-200 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
             {/* Left Column */}
@@ -566,10 +651,10 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
               {/* CTAs */}
               <div className="pt-2 flex flex-wrap items-center gap-4">
                 <a
-                  href="#sangharsh"
+                  href="#vikas-karya"
                   className="bg-brandRed-600 hover:bg-brandRed-700 text-white px-6 py-3.5 rounded-xl font-bold text-base shadow-sm hover:shadow-md transition-all flex items-center gap-2"
                 >
-                  <Flame className="w-5 h-5 text-amber-300" />
+                  <Building2 className="w-5 h-5 text-amber-300" />
                   {curr.hero.cta1}
                 </a>
                 <a
@@ -769,183 +854,7 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
         </div>
       </section>
 
-      {/* 6. SANGHARSH AUR MUDDE (TIMELINE) */}
-      <section id="sangharsh" className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <div className="inline-block bg-brandRed-50 text-brandRed-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest border border-brandRed-200 mb-2">
-              {curr.struggles.tag}
-            </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black font-display text-slate-900">
-              {curr.struggles.title}
-            </h2>
-            <p className="text-slate-600 mt-2 text-base">
-              {curr.struggles.sub}
-            </p>
-            <div className="w-20 h-1 bg-brandRed-600 mx-auto mt-3 rounded-full"></div>
-          </div>
-
-          <div className="space-y-8 relative">
-            {/* 1. Betiyahata Naale Ki Aarti */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              <div className="md:col-span-7 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <span className="inline-block bg-brandRed-100 text-brandRed-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-brandRed-200 mb-2">
-                  {curr.struggles.c1Tag}
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black font-display text-slate-900">
-                  {curr.struggles.c1Title}
-                </h3>
-                <p className="text-sm text-slate-700 mt-2 leading-relaxed">
-                  {curr.struggles.c1Desc}
-                </p>
-                <div className="mt-3 pt-3 border-t border-slate-200 text-xs font-bold text-brandRed-700">
-                  {curr.struggles.c1Proof}
-                </div>
-              </div>
-              <div className="md:col-span-5 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
-                <div
-                  onClick={() => {
-                    setSelectedImage('/assets/743081800_27085368861146189_4660532069274368196_n.jpg');
-                    setSelectedImageTitle(curr.struggles.c1Title);
-                  }}
-                  className="cursor-pointer group relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-100 border border-slate-200"
-                >
-                  <Image
-                    src="/assets/743081800_27085368861146189_4660532069274368196_n.jpg"
-                    alt={curr.struggles.c1Title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                    <span className="bg-brandRed-600 text-white px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1 shadow">
-                      <ZoomIn className="w-3.5 h-3.5" /> {curr.gallery.zoomBtn}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 2. UPNagar Ayukt Sanjay Shukla Morcha */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              <div className="md:col-span-5 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm order-2 md:order-1">
-                <div
-                  onClick={() => {
-                    setSelectedImage('/assets/795332593_27852400004443067_3113860931798894358_n.jpg');
-                    setSelectedImageTitle(curr.struggles.c2Title);
-                  }}
-                  className="cursor-pointer group relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-100 border border-slate-200"
-                >
-                  <Image
-                    src="/assets/795332593_27852400004443067_3113860931798894358_n.jpg"
-                    alt={curr.struggles.c2Title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                    <span className="bg-slate-900 text-white px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1 shadow">
-                      <ZoomIn className="w-3.5 h-3.5" /> {curr.gallery.zoomBtn}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="md:col-span-7 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm order-1 md:order-2">
-                <span className="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-200 mb-2">
-                  {curr.struggles.c2Tag}
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black font-display text-slate-900">
-                  {curr.struggles.c2Title}
-                </h3>
-                <p className="text-sm text-slate-700 mt-2 leading-relaxed">
-                  {curr.struggles.c2Desc}
-                </p>
-                <div className="mt-3 pt-3 border-t border-slate-200 text-xs font-bold text-slate-600">
-                  {curr.struggles.c2Proof}
-                </div>
-              </div>
-            </div>
-
-            {/* 3. Fogging Scam */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              <div className="md:col-span-7 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm">
-                <span className="inline-block bg-brandRed-100 text-brandRed-800 text-xs font-bold px-2.5 py-0.5 rounded-full border border-brandRed-200 mb-2">
-                  {curr.struggles.c3Tag}
-                </span>
-                <h3 className="text-xl sm:text-2xl font-black font-display text-slate-900">
-                  {curr.struggles.c3Title}
-                </h3>
-                <p className="text-sm text-slate-700 mt-2 leading-relaxed">
-                  {curr.struggles.c3Desc}
-                </p>
-                <div className="mt-3 pt-3 border-t border-slate-200 text-xs font-bold text-brandRed-700">
-                  {curr.struggles.c3Proof}
-                </div>
-              </div>
-              <div className="md:col-span-5 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm">
-                <div
-                  onClick={() => {
-                    setSelectedImage('/assets/814629880_27832202283129506_40090162660360342_n.jpg');
-                    setSelectedImageTitle(curr.struggles.c3Title);
-                  }}
-                  className="cursor-pointer group relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-slate-100 border border-slate-200"
-                >
-                  <Image
-                    src="/assets/814629880_27832202283129506_40090162660360342_n.jpg"
-                    alt={curr.struggles.c3Title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                    <span className="bg-brandRed-600 text-white px-3 py-1 rounded-lg text-xs font-bold flex items-center gap-1 shadow">
-                      <ZoomIn className="w-3.5 h-3.5" /> {curr.gallery.zoomBtn}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* 4. Board Baithak, 5. Senior Honor, 6. Vikas Karya */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                <span className="inline-block bg-brandGreen-100 text-brandGreen-800 text-xs font-bold px-2.5 py-0.5 rounded-full">
-                  {curr.struggles.c4Tag}
-                </span>
-                <h3 className="text-lg font-bold font-display text-slate-900">
-                  {curr.struggles.c4Title}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {curr.struggles.c4Desc}
-                </p>
-              </div>
-
-              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                <span className="inline-block bg-brandGreen-100 text-brandGreen-800 text-xs font-bold px-2.5 py-0.5 rounded-full">
-                  {curr.struggles.c5Tag}
-                </span>
-                <h3 className="text-lg font-bold font-display text-slate-900">
-                  {curr.struggles.c5Title}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {curr.struggles.c5Desc}
-                </p>
-              </div>
-
-              <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
-                <span className="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-2.5 py-0.5 rounded-full">
-                  {curr.struggles.c6Tag}
-                </span>
-                <h3 className="text-lg font-bold font-display text-slate-900">
-                  {curr.struggles.c6Title}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {curr.struggles.c6Desc}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. VIKAS KARYA (DEVELOPMENT WORKS) */}
+      {/* 5. VIKAS KARYA (DEVELOPMENT WORKS) */}
       <section id="vikas-karya" className="py-16 bg-slate-50 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-12">
@@ -1060,149 +969,90 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
-                  <span className="text-xs font-bold text-brandRed-700 bg-brandRed-50 px-2 py-0.5 rounded">
-                    {lang === 'hi' ? 'अमर उजाला' : 'Amar Ujala'}
-                  </span>
-                  <span className="text-xs text-slate-500 font-mono">Gorakhpur</span>
-                </div>
-                <h3 className="text-base font-bold font-display text-slate-900 leading-snug">
-                  {lang === 'hi'
-                    ? '"पार्षद के जलभराव विरोध वीडियो की प्रदेश भर में चर्चा"'
-                    : '"Corporator\'s drainage protest video sparks state-wide attention"'}
-                </h3>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-600">{lang === 'hi' ? 'मुद्दा: जलभराव' : 'Issue: Drainage'}</span>
-                <button
-                  onClick={() => {
-                    setSelectedImage('/assets/743081800_27085368861146189_4660532069274368196_n.jpg');
-                    setSelectedImageTitle('Newspaper Report');
-                  }}
-                  className="text-brandRed-600 hover:underline flex items-center gap-1"
-                >
-                  <ZoomIn className="w-3.5 h-3.5" /> {curr.media.viewClipping}
-                </button>
-              </div>
-            </div>
+            {RECENT_NEWS.map((item) => (
+              <article
+                key={item.id}
+                className="bg-slate-50 hover:bg-white rounded-2xl border border-slate-200 hover:border-brandRed-300 hover:shadow-lg transition-all duration-300 flex flex-col justify-between overflow-hidden group"
+              >
+                <div className="p-5 flex-1 flex flex-col">
+                  {/* Category Badge Header */}
+                  <div className="flex items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-200/80">
+                    <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-md shadow-xs ${item.badgeBg}`}>
+                      {item.category}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setSelectedImage(item.image);
+                        setSelectedImageTitle(lang === 'hi' ? item.titleHi : item.titleEn);
+                      }}
+                      className="text-[11px] text-slate-500 hover:text-brandRed-600 font-medium flex items-center gap-1 transition-colors"
+                    >
+                      <ZoomIn className="w-3.5 h-3.5" />
+                      <span>{curr.media.viewClipping}</span>
+                    </button>
+                  </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
-                  <span className="text-xs font-bold text-brandRed-700 bg-brandRed-50 px-2 py-0.5 rounded">
-                    {lang === 'hi' ? 'अमर उजाला' : 'Amar Ujala'}
-                  </span>
-                  <span className="text-xs text-slate-500 font-mono">Headlines</span>
-                </div>
-                <h3 className="text-base font-bold font-display text-slate-900 leading-snug">
-                  {lang === 'hi'
-                    ? '"वार्ड में एक मशीन के ही भरोसे हो रही फॉगिंग"'
-                    : '"Ward reliant on just one machine for fogging"'}
-                </h3>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-600">{lang === 'hi' ? 'मुद्दा: स्वास्थ्य' : 'Issue: Public Health'}</span>
-                <button
-                  onClick={() => {
-                    setSelectedImage('/assets/814629880_27832202283129506_40090162660360342_n.jpg');
-                    setSelectedImageTitle('Fogging Scam Report');
-                  }}
-                  className="text-brandRed-600 hover:underline flex items-center gap-1"
-                >
-                  <ZoomIn className="w-3.5 h-3.5" /> {curr.media.viewClipping}
-                </button>
-              </div>
-            </div>
+                  {/* Title Linked to Lightbox */}
+                  <h3 className="text-base font-bold font-display text-slate-900 leading-snug mb-2 group-hover:text-brandRed-600 transition-colors">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedImage(item.image);
+                        setSelectedImageTitle(lang === 'hi' ? item.titleHi : item.titleEn);
+                      }}
+                      className="text-left hover:underline flex items-start justify-between gap-2 w-full"
+                    >
+                      <span>{lang === 'hi' ? item.titleHi : item.titleEn}</span>
+                      <ZoomIn className="w-4 h-4 shrink-0 text-slate-400 group-hover:text-brandRed-600 transition-colors mt-0.5" />
+                    </button>
+                  </h3>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
-                  <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
-                    {lang === 'hi' ? 'दैनिक जागरण' : 'Dainik Jagran'}
-                  </span>
-                  <span className="text-xs text-slate-500 font-mono">Gorakhpur</span>
+                  {/* Snippet */}
+                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 mb-4 flex-1">
+                    {lang === 'hi' ? item.snippetHi : item.snippetEn}
+                  </p>
                 </div>
-                <h3 className="text-base font-bold font-display text-slate-900 leading-snug">
-                  {lang === 'hi'
-                    ? '"उपनगर आयुक्त के खिलाफ खोला मोर्चा"'
-                    : '"Protest launched against Deputy Municipal Commissioner"'}
-                </h3>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold">
-                <span className="text-slate-600">{lang === 'hi' ? 'मुद्दा: जवाबदेही' : 'Issue: Accountability'}</span>
-                <button
-                  onClick={() => {
-                    setSelectedImage('/assets/795332593_27852400004443067_3113860931798894358_n.jpg');
-                    setSelectedImageTitle('Dainik Jagran Report');
-                  }}
-                  className="text-brandRed-600 hover:underline flex items-center gap-1"
-                >
-                  <ZoomIn className="w-3.5 h-3.5" /> {curr.media.viewClipping}
-                </button>
-              </div>
-            </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
-                  <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-0.5 rounded">
-                    {lang === 'hi' ? 'हिंदुस्तान' : 'Hindustan'}
-                  </span>
-                  <span className="text-xs text-slate-500 font-mono">Gorakhpur Live</span>
-                </div>
-                <h3 className="text-base font-bold font-display text-slate-900 leading-snug">
-                  {lang === 'hi'
-                    ? '"बेतियाहाता में जलभराव, नमामि नाला परिषद ने की आरती"'
-                    : '"Betiyahata waterlogged, Namami Nala parishad performs aarti"'}
-                </h3>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-600">
-                <span>{lang === 'hi' ? 'ड्रेनेज समस्या' : 'Drainage'}</span>
-                <span>Gorakhpur</span>
-              </div>
-            </div>
+                {/* Card Action Footer */}
+                <div className="px-5 py-3.5 bg-slate-100/70 border-t border-slate-200 flex items-center justify-between text-xs font-bold">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedImage(item.image);
+                      setSelectedImageTitle(lang === 'hi' ? item.titleHi : item.titleEn);
+                    }}
+                    className="text-brandRed-600 hover:text-brandRed-700 flex items-center gap-1 transition-colors"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5" />
+                    <span>{curr.media.viewClipping}</span>
+                  </button>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
-                  <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
-                    {lang === 'hi' ? 'दैनिक जागरण' : 'Dainik Jagran'}
-                  </span>
-                  <span className="text-xs text-slate-500 font-mono">Samaroh</span>
+                  <Link
+                    href="/media"
+                    className="text-slate-600 hover:text-slate-900 flex items-center gap-1 transition-colors"
+                  >
+                    <span>{lang === 'hi' ? 'मीडिया पेज देखें' : 'View Media'}</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
                 </div>
-                <h3 className="text-base font-bold font-display text-slate-900 leading-snug">
-                  {lang === 'hi'
-                    ? '"सम्मान पाकर खिल उठे वरिष्ठजनों के चेहरे"'
-                    : '"Smiles bloom on senior citizens\' faces upon felicitation"'}
-                </h3>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-600">
-                <span>{lang === 'hi' ? 'वरिष्ठ सम्मान' : 'Senior Honor'}</span>
-                <span>Gorakhpur</span>
-              </div>
-            </div>
+              </article>
+            ))}
+          </div>
 
-            <div className="bg-slate-50 p-5 rounded-2xl border border-slate-200 hover:border-slate-300 transition-all flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between border-b border-slate-200 pb-2 mb-3">
-                  <span className="text-xs font-bold text-brandRed-700 bg-brandRed-50 px-2 py-0.5 rounded">
-                    {lang === 'hi' ? 'अमर उजाला' : 'Amar Ujala'}
-                  </span>
-                  <span className="text-xs text-slate-500 font-mono">Civic Watch</span>
-                </div>
-                <h3 className="text-base font-bold font-display text-slate-900 leading-snug">
-                  {lang === 'hi'
-                    ? '"जनता भी रखेगी नगर निगम के निर्माण कार्यों पर नजर"'
-                    : '"Citizens to keep direct watch on civic construction works"'}
-                </h3>
-              </div>
-              <div className="mt-4 pt-3 border-t border-slate-200 flex items-center justify-between text-xs font-bold text-slate-600">
-                <span>{lang === 'hi' ? 'पारदर्शिता' : 'Transparency'}</span>
-                <span>Gorakhpur</span>
-              </div>
-            </div>
+          {/* CTA to Full Media Page */}
+          <div className="mt-12 text-center">
+            <Link
+              href="/media"
+              className="inline-flex items-center gap-2.5 bg-gradient-to-r from-brandRed-600 to-amber-600 hover:from-brandRed-700 hover:to-amber-700 text-white px-7 py-3.5 rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all group"
+            >
+              <Newspaper className="w-4 h-4" />
+              <span>
+                {lang === 'hi'
+                  ? 'सभी 50+ अखबार कतरनें एवं संपूर्ण मीडिया कवरेज देखें'
+                  : 'View All 50+ Press Clippings & Full Media Archive'}
+              </span>
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
       </section>
@@ -1224,86 +1074,74 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div
-              onClick={() => {
-                setSelectedImage('/assets/743081800_27085368861146189_4660532069274368196_n.jpg');
-                setSelectedImageTitle(lang === 'hi' ? 'नाले की आरती आंदोलन कवरेज' : 'Drainage Protest Press Coverage');
-              }}
-              className="cursor-pointer bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-                <Image
-                  src="/assets/743081800_27085368861146189_4660532069274368196_n.jpg"
-                  alt="Gallery 1"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                  <span className="bg-brandRed-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow">
-                    <ZoomIn className="w-4 h-4" /> {curr.gallery.zoomBtn}
-                  </span>
-                </div>
-              </div>
-              <div className="mt-3">
-                <h4 className="font-bold text-sm text-slate-800 line-clamp-2">
-                  {lang === 'hi' ? 'बेतियाहाता नाले की आरती व जलभराव कवरेज' : 'Betiyahata drainage protest and media coverage'}
-                </h4>
-              </div>
-            </div>
+            {HOMEPAGE_GALLERY.map((item) => (
+              <div
+                key={item.id}
+                onClick={() => {
+                  setSelectedImage(item.image);
+                  setSelectedImageTitle(lang === 'hi' ? item.titleHi : item.titleEn);
+                }}
+                className="cursor-pointer bg-white p-3.5 rounded-2xl border border-slate-200 shadow-xs hover:shadow-xl hover:border-brandRed-300 transition-all duration-300 group flex flex-col justify-between"
+              >
+                <div>
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                    <Image
+                      src={item.image}
+                      alt={lang === 'hi' ? item.titleHi : item.titleEn}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-70 group-hover:opacity-90 transition-opacity" />
 
-            <div
-              onClick={() => {
-                setSelectedImage('/assets/795332593_27852400004443067_3113860931798894358_n.jpg');
-                setSelectedImageTitle(lang === 'hi' ? 'उपनगर आयुक्त के खिलाफ धरना' : 'Protest Against Deputy Commissioner');
-              }}
-              className="cursor-pointer bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-                <Image
-                  src="/assets/795332593_27852400004443067_3113860931798894358_n.jpg"
-                  alt="Gallery 2"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                  <span className="bg-brandRed-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow">
-                    <ZoomIn className="w-4 h-4" /> {curr.gallery.zoomBtn}
-                  </span>
-                </div>
-              </div>
-              <div className="mt-3">
-                <h4 className="font-bold text-sm text-slate-800 line-clamp-2">
-                  {lang === 'hi' ? 'उपनगर आयुक्त के खिलाफ धरना व कोतवाली में मांग' : 'Dharna and police demand against administrative apathy'}
-                </h4>
-              </div>
-            </div>
+                    {/* Badge */}
+                    <div className="absolute top-2.5 left-2.5">
+                      <span className="bg-slate-900/90 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded shadow backdrop-blur-xs">
+                        {item.tag}
+                      </span>
+                    </div>
 
-            <div
-              onClick={() => {
-                setSelectedImage('/assets/814629880_27832202283129506_40090162660360342_n.jpg');
-                setSelectedImageTitle(lang === 'hi' ? 'फॉगिंग घोटाला अमर उजाला रिपोर्ट' : 'Fogging Issue Investigation');
-              }}
-              className="cursor-pointer bg-white p-3 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-all group"
-            >
-              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
-                <Image
-                  src="/assets/814629880_27832202283129506_40090162660360342_n.jpg"
-                  alt="Gallery 3"
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-                <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
-                  <span className="bg-brandRed-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1 shadow">
-                    <ZoomIn className="w-4 h-4" /> {curr.gallery.zoomBtn}
+                    <div className="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                      <span className="bg-brandRed-600 text-white px-3.5 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 shadow-lg">
+                        <ZoomIn className="w-4 h-4" /> {curr.gallery.zoomBtn}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-3.5 space-y-1">
+                    <span className="text-[10px] font-bold text-brandRed-700 uppercase tracking-wide block">
+                      {item.source}
+                    </span>
+                    <h4 className="font-bold text-sm text-slate-900 line-clamp-2 group-hover:text-brandRed-600 transition-colors">
+                      {lang === 'hi' ? item.titleHi : item.titleEn}
+                    </h4>
+                    <p className="text-xs text-slate-500 line-clamp-2 pt-0.5">
+                      {lang === 'hi' ? item.descHi : item.descEn}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-brandRed-600">
+                  <span className="flex items-center gap-1 group-hover:underline">
+                    <ZoomIn className="w-3.5 h-3.5" /> {curr.gallery.zoomBtn}
+                  </span>
+                  <span className="text-slate-400 font-normal text-[11px]">
+                    {lang === 'hi' ? 'दस्तावेजी साक्ष्य' : 'Verified Evidence'}
                   </span>
                 </div>
               </div>
-              <div className="mt-3">
-                <h4 className="font-bold text-sm text-slate-800 line-clamp-2">
-                  {lang === 'hi' ? 'वार्ड में एक मशीन के ही भरोसे हो रही फॉगिंग' : 'Amar Ujala investigation on ward sanitation & fogging'}
-                </h4>
-              </div>
-            </div>
+            ))}
+          </div>
+
+          {/* CTA to Full Photo Gallery Page */}
+          <div className="mt-12 text-center">
+            <Link
+              href="/gallery"
+              className="inline-flex items-center gap-2.5 bg-slate-900 hover:bg-slate-800 text-white px-7 py-3.5 rounded-xl font-bold text-sm shadow-md hover:shadow-lg transition-all group"
+            >
+              <Images className="w-4 h-4 text-amber-400" />
+              <span>{curr.gallery.viewAllBtn}</span>
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
       </section>
@@ -1434,7 +1272,7 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
                       <option value="हरीर प्रसाद दुबे मार्ग (Harir Dubey Marg)">हरीर प्रसाद दुबे मार्ग (Harir Dubey Marg)</option>
                       <option value="प्रेमचंद पार्क / बोधघाट (Premchand Park)">प्रेमचंद पार्क / बोधघाट (Premchand Park)</option>
                       <option value="मोहद्दीपुर क्षेत्र (Mohaddipur Area)">मोहद्दीपुर क्षेत्र (Mohaddipur Area)</option>
-                      <option value="वार्ड 322 अन्य क्षेत्र (Other Ward 322)">वार्ड 322 अन्य क्षेत्र (Other Ward 322)</option>
+                      <option value="वार्ड 26 अन्य क्षेत्र (Other Ward 26)">वार्ड 26 अन्य क्षेत्र (Other Ward 26)</option>
                     </select>
                   </div>
 
@@ -1538,11 +1376,11 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 322.'}`;
                 <span>•</span>
                 <a href="#jeevan-parichay" className="hover:text-white transition-colors">{curr.nav.bio}</a>
                 <span>•</span>
-                <a href="#sangharsh" className="hover:text-white transition-colors">{curr.nav.struggles}</a>
-                <span>•</span>
                 <a href="#vikas-karya" className="hover:text-white transition-colors">{curr.nav.works}</a>
                 <span>•</span>
-                <a href="#media" className="hover:text-white transition-colors">{curr.nav.media}</a>
+                <Link href="/media" className="hover:text-white transition-colors">{curr.nav.media}</Link>
+                <span>•</span>
+                <a href="#gallery" className="hover:text-white transition-colors">{curr.nav.gallery}</a>
                 <span>•</span>
                 <a href="#jan-sampark" className="hover:text-white transition-colors">{curr.nav.contact}</a>
               </div>
