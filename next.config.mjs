@@ -2,11 +2,11 @@ import path from 'path';
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  distDir: '.next',
+  outputFileTracingRoot: path.resolve(process.cwd()),
   images: {
     unoptimized: true,
   },
-  outputFileTracingRoot: path.resolve(process.cwd()),
 };
 
 export default nextConfig;
