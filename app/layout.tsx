@@ -10,15 +10,15 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vishwajeettripathi.in"),
-  title: "विश्वजीत त्रिपाठी 'सोनू' | Vishwajeet Tripathi 'Sonu' - Corporator Ward 26 Madhopur-Betiyahata Gorakhpur",
-  description: "Official portal of Vishwajeet Tripathi aka Sonu Tiwari - Independent & Fearless Corporator (Parshad), Nagar Nigam Gorakhpur (Ward 26 Madhopur / Betiyahata). Dedicated to public service, infrastructure development, and transparent governance in Gorakhpur.",
+  title: "विश्वजीत त्रिपाठी 'सोनू' | Vishwajeet Tripathi 'Sonu' - Corporator Ward 26 Betiyahata Gorakhpur",
+  description: "Official portal of Vishwajeet Tripathi aka Sonu Tiwari - Independent & Fearless Corporator (Parshad), Nagar Nigam Gorakhpur (Ward 26 Betiyahata). Dedicated to public service, infrastructure development, and transparent governance in Gorakhpur.",
   keywords: [
     "विश्वजीत त्रिपाठी",
     "सोनू तिवारी",
     "Sonu Tiwari Gorakhpur",
     "Vishwajeet Tripathi",
     "Parshad Ward 26 Gorakhpur",
-    "Madhopur Betiyahata Parshad",
+    "Betiyahata Parshad",
     "Nagar Nigam Gorakhpur Corporator",
     "Shahar Vidhansabha 322",
     "Gorakhpur Public Leader",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "विश्वजीत त्रिपाठी 'सोनू' | Corporator Ward 26 Gorakhpur",
-    description: "अन्याय के खिलाफ, जनता के साथ - नगर निगम गोरखपुर वार्ड 26 (माधोपुर-बेतियाहाता)।",
+    description: "अन्याय के खिलाफ, जनता के साथ - नगर निगम गोरखपुर वार्ड 26 (बेतियाहाता)।",
     images: ["/assets/leader-hero-section-image.png"],
   },
   robots: {
@@ -106,15 +106,15 @@ const jsonLd = {
         "https://facebook.com/sonu.tiwari.125323"
       ],
       "image": "https://vishwajeettripathi.in/assets/leader-hero-section-image.png",
-      "description": "गोरखपुर नगर निगम वार्ड 26 माधोपुर-बेतियाहाता से निर्भीक व जुझारू जन-प्रतिनिधि पार्षद।"
+      "description": "गोरखपुर नगर निगम वार्ड 26 बेतियाहाता से निर्भीक व जुझारू जन-प्रतिनिधि पार्षद।"
     },
     {
       "@type": "GovernmentOffice",
       "@id": "https://vishwajeettripathi.in/#office",
-      "name": "पार्षद जन-सेवा कार्यालय - वार्ड 26 माधोपुर-बेतियाहाता (गोरखपुर)",
+      "name": "पार्षद जन-सेवा कार्यालय - वार्ड 26 बेतियाहाता (गोरखपुर)",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "वार्ड 26, माधोपुर - बेतियाहाता",
+        "streetAddress": "वार्ड 26, बेतियाहाता",
         "addressLocality": "गोरखपुर",
         "addressRegion": "उत्तर प्रदेश",
         "postalCode": "273001",

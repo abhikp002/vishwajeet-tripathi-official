@@ -16,7 +16,6 @@ import {
   Calendar,
   Clock,
   Send,
-  Copy,
   CheckCircle2,
   ExternalLink,
   ChevronRight,
@@ -153,7 +152,7 @@ const HOMEPAGE_GALLERY = [
     tag: 'ड्रेनेज व जल-निकासी',
     titleHi: 'वार्ड 26 में ड्रेनेज निर्माण व जलभराव की स्थायी कार्ययोजना',
     titleEn: 'Permanent Drainage Infrastructure Plan for Ward 26',
-    descHi: 'सत्याग्रह के बाद नगर निगम द्वारा बेतियाहाता-माधोपुर में नाला निर्माण की स्वीकृति।',
+    descHi: 'सत्याग्रह के बाद नगर निगम द्वारा बेतियाहाता क्षेत्र में नाला निर्माण की स्वीकृति।',
     descEn: 'Municipal sanction for comprehensive drainage infrastructure following citizen agitation.',
   },
   {
@@ -173,14 +172,13 @@ const HOMEPAGE_GALLERY = [
     tag: 'धरातल पर विकास',
     titleHi: '₹2.24 Cr हरिहर प्रसाद दुबे मार्ग व अमृत सरोवर निर्माण योजना',
     titleEn: 'Documentation of ₹2.24 Cr Harihar Prasad Dubey Marg',
-    descHi: 'माधोपुर और बेतियाहाता को जोड़ने वाले प्रमुख मार्ग व जल निकासी के कायाकल्प की स्वीकृति।',
+    descHi: 'बेतियाहाता क्षेत्र के प्रमुख मार्ग व जल निकासी के कायाकल्प की स्वीकृति।',
     descEn: 'Sanction and budget documentation for key road reconstruction and drainage improvement.',
   },
 ];
 
 export default function HomePage() {
   const [lang, setLang] = useState<'hi' | 'en'>('hi');
-  const [copied, setCopied] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedImageTitle, setSelectedImageTitle] = useState<string | null>(null);
@@ -196,13 +194,13 @@ export default function HomePage() {
 
   const t = {
     hi: {
-      topBar: "माधोपुर - बेतियाहाता - शहर विधानसभा 322, गोरखपुर",
+      topBar: "बेतियाहाता - शहर विधानसभा 322, गोरखपुर",
       janSunwai: "जन-सुनवाई: प्रतिदिन प्रातः 8:00 से 10:00 बजे",
       fbFollowers: "15K+ फेसबुक समर्थक",
       reportIssue: "सुझाव / शिकायत पेटी",
       name: "विश्वजीत त्रिपाठी 'सोनू'",
       titleBadge: "पार्षद, वार्ड 26",
-      role: "पार्षद - नगर निगम गोरखपुर | वार्ड 26 (माधोपुर - बेतियाहाता)",
+      role: "पार्षद - नगर निगम गोरखपुर | वार्ड 26 (बेतियाहाता)",
       nav: {
         home: "मुख्य पृष्ठ",
         bio: "जीवन परिचय",
@@ -213,11 +211,11 @@ export default function HomePage() {
       },
       hero: {
         badge: "जन-सेवा • निष्पक्षता • विकास",
-        tag: "जन-सेवा एवं सामाजिक सरोकार • वार्ड 26 (माधोपुर - बेतियाहाता)",
+        tag: "जन-सेवा एवं सामाजिक सरोकार • वार्ड 26 (बेतियाहाता)",
         h1Line1: "अन्याय के खिलाफ,",
         h1Line2: "जनता के साथ।",
         h2: "पार्षद विश्वजीत त्रिपाठी 'सोनू'",
-        p: "नगर निगम में भ्रष्टाचार के खिलाफ बुलंद आवाज, वार्ड 26 (माधोपुर - बेतियाहाता) की हर गली-मोहल्ले की समस्याओं के त्वरित समाधान और आम नागरिक के हक व सम्मान के लिए निरंतर सेवारत।",
+        p: "नगर निगम में भ्रष्टाचार के खिलाफ बुलंद आवाज, वार्ड 26 (बेतियाहाता) की हर गली-मोहल्ले की समस्याओं के त्वरित समाधान और आम नागरिक के हक व सम्मान के लिए निरंतर सेवारत।",
         cta1: "प्रमुख विकास कार्य देखें",
         cta2: "समस्या / सुझाव दर्ज करें",
         fbVerified: "15,000+ से अधिक सक्रिय समर्थक एवं नागरिक जुड़ाव",
@@ -246,10 +244,10 @@ export default function HomePage() {
         tag: "व्यक्तिगत परिचय व दृष्टिकोण",
         title: "गोरखपुर की माटी से उपजा, जनता का सच्चा सेवक",
         nameFull: "विश्वजीत त्रिपाठी (सोनू तिवारी)",
-        roleTag: "पार्षद, वार्ड 26 (माधोपुर - बेतियाहाता)",
-        p1: "गोरखपुर शहर के बेतियाहाता और माधोपुर की गलियों में पले-बढ़े विश्वजीत त्रिपाठी 'सोनू' छात्र जीवन से ही जन-सरोकारों, सामाजिक न्याय और अन्याय के खिलाफ मुखर रहे हैं।",
+        roleTag: "पार्षद, वार्ड 26 (बेतियाहाता)",
+        p1: "गोरखपुर शहर के बेतियाहाता की गलियों में पले-बढ़े विश्वजीत त्रिपाठी 'सोनू' छात्र जीवन से ही जन-सरोकारों, सामाजिक न्याय और अन्याय के खिलाफ मुखर रहे हैं।",
         p2: "उन्होंने अपनी प्रारंभिक व माध्यमिक शिक्षा गोरखपुर के प्रतिष्ठित एम.जी. इंटर कॉलेज (M.G. Inter College Gorakhpur) से पूर्ण की और तत्पश्चात दीनदयाल उपाध्याय गोरखपुर विश्वविद्यालय (D.D.U. Gorakhpur) से उच्च शिक्षा प्राप्त की। युवावस्था से ही वे सामाजिक कार्यों व नागरिक समस्याओं के निवारण हेतु सक्रिय रहे हैं।",
-        p3: "नगर निगम गोरखपुर के वार्ड 26 (माधोपुर - बेतियाहाता) से पार्षद निर्वाचित होने के बाद वे बिना किसी पूर्वाग्रह के निष्पक्ष भाव से केवल जनता के हक, जलभराव से मुक्ति, सफाई, प्रकाश और विकास के लिए समर्पित हैं।",
+        p3: "नगर निगम गोरखपुर के वार्ड 26 (बेतियाहाता) से पार्षद निर्वाचित होने के बाद वे बिना किसी पूर्वाग्रह के निष्पक्ष भाव से केवल जनता के हक, जलभराव से मुक्ति, सफाई, प्रकाश और विकास के लिए समर्पित हैं।",
         eduLabel: "शिक्षा संस्थान:",
         eduValue: "M.G. Inter College & D.D.U. गोरखपुर विश्वविद्यालय",
         ideologyLabel: "कार्यशैली:",
@@ -268,12 +266,12 @@ export default function HomePage() {
         w1Status: "स्वीकृत व प्रगति पर",
         w1Budget: "लागत: ₹2.24 Cr",
         w1Title: "हरीर प्रसाद दुबे मार्ग व अमृत सरोवर निर्माण",
-        w1Desc: "माधोपुर और बेतियाहाता को जोड़ने वाले प्रमुख संपर्क मार्ग का चौड़ीकरण, इंटरलॉकिंग, आरसीसी नाला और अमृत सरोवर का समग्र कायाकल्प।",
+        w1Desc: "बेतियाहाता क्षेत्र के प्रमुख संपर्क मार्ग का चौड़ीकरण, इंटरलॉकिंग, आरसीसी नाला और अमृत सरोवर का समग्र कायाकल्प।",
         w1Note: "गुणवत्ता व समयसीमा की प्रत्यक्ष निगरानी",
         w2Status: "धरातल पर क्रियान्वयन",
         w2Tag: "वार्ड 26",
         w2Title: "नाली-जाल, ड्रेनेज व जल निकासी तंत्र",
-        w2Desc: "बेतियाहाता व माधोपुर के मुख्य नाले की सिल्ट सफाई, नए ढक्कन लगाना तथा मानसून से पहले जलभराव से मुक्ति हेतु युद्धस्तर पर कार्य।",
+        w2Desc: "बेतियाहाता के मुख्य नाले की सिल्ट सफाई, नए ढक्कन लगाना तथा मानसून से पहले जलभराव से मुक्ति हेतु युद्धस्तर पर कार्य।",
         w2Note: "नागरिक शिकायत पर त्वरित कार्रवाई",
         w3Status: "सतत जन-अभियान",
         w3Tag: "जन-स्वास्थ्य",
@@ -302,17 +300,17 @@ export default function HomePage() {
       contact: {
         tag: "सुझाव व समस्या निवारण",
         title: "जन-सुनवाई एवं संपर्क कार्यालय",
-        sub: "माधोपुर और बेतियाहाता के हर नागरिक की समस्या का त्वरित समाधान हमारा संकल्प है",
+        sub: "बेतियाहाता के हर नागरिक की समस्या का त्वरित समाधान हमारा संकल्प है",
         officeHeading: "पार्षद कार्यालय विवरण",
         addressLabel: "कार्यालय पता:",
-        addressValue: "वार्ड 26 (माधोपुर - बेतियाहाता), नगर निगम गोरखपुर, उत्तर प्रदेश - 273001",
+        addressValue: "वार्ड 26 (बेतियाहाता), नगर निगम गोरखपुर, उत्तर प्रदेश - 273001",
         timingsLabel: "जन-सुनवाई समय:",
         timingsValue: "प्रतिदिन प्रातः 08:00 बजे से 10:00 बजे तक (कार्यालय में प्रत्यक्ष मुलाकात)",
         fbLabel: "आधिकारिक फेसबुक:",
         emergencyTitle: "जलभराव या आपातकालीन समस्या?",
         emergencyDesc: "वार्ड में सीवर चोक, नाला ओवरफ्लो या बिजली/सड़क समस्या पर तत्काल फॉर्म भरकर व्हाट्सएप पर साझा करें।",
         formHeading: "अपनी समस्या / सुझाव दर्ज करें",
-        formSub: "यह फॉर्म तुरंत आपके लिए एक सुव्यवस्थित प्रारूप तैयार करेगा जिसे आप कॉपी या व्हाट्सएप कर सकते हैं।",
+        formSub: "यह फॉर्म तुरंत आपके लिए एक सुव्यवस्थित प्रारूप तैयार करेगा जिसे आप सीधे व्हाट्सएप पर भेज सकते हैं।",
         nameLabel: "आपका पूरा नाम *",
         namePlaceholder: "उदा. अमित त्रिपाठी",
         phoneLabel: "मोबाइल नंबर *",
@@ -321,27 +319,24 @@ export default function HomePage() {
         categoryLabel: "समस्या की श्रेणी *",
         problemLabel: "समस्या का विस्तृत विवरण *",
         problemPlaceholder: "कृपया अपनी समस्या, सटीक स्थान/लैंडमार्क और आवश्यक कार्रवाई का विवरण लिखें...",
-        btnCopy: "संदेश कॉपी करें (Copy Draft)",
-        btnCopied: "संदेश कॉपी हो गया!",
         btnWhatsapp: "व्हाट्सएप पर भेजें",
-        copySuccess: "✓ आपका आवेदन पत्र तैयार कर क्लिपबोर्ड पर कॉपी कर लिया गया है। इसे किसी भी माध्यम से साझा कर सकते हैं।",
       },
       footer: {
         title: "विश्वजीत त्रिपाठी 'सोनू'",
-        role: "पार्षद - वार्ड 26 (माधोपुर - बेतियाहाता), नगर निगम गोरखपुर (उ.प्र.)",
+        role: "पार्षद - वार्ड 26 (बेतियाहाता), नगर निगम गोरखपुर (उ.प्र.)",
         tagline: "अन्याय के खिलाफ, जनता के साथ • गोरखपुर का समग्र विकास",
         copyright: "© 2025-2026 कार्यालय विश्वजीत त्रिपाठी (सोनू तिवारी). सर्वाधिकार सुरक्षित।",
         city: "नगर निगम गोरखपुर • शाहर विधानसभा 322",
       }
     },
     en: {
-      topBar: "Madhopur - Betiyahata - Assembly 322, Gorakhpur",
+      topBar: "Betiyahata - Assembly 322, Gorakhpur",
       janSunwai: "Public Hearing: Daily 8:00 AM to 10:00 AM",
       fbFollowers: "15K+ Facebook Community",
       reportIssue: "Suggestion / Grievance Box",
       name: "Vishwajeet Tripathi 'Sonu'",
       titleBadge: "Corporator, Ward 26",
-      role: "Corporator - Nagar Nigam Gorakhpur | Ward 26 (Madhopur - Betiyahata)",
+      role: "Corporator - Nagar Nigam Gorakhpur | Ward 26 (Betiyahata)",
       nav: {
         home: "Home",
         bio: "Biography",
@@ -352,11 +347,11 @@ export default function HomePage() {
       },
       hero: {
         badge: "PUBLIC SERVICE • INTEGRITY • PROGRESS",
-        tag: "Dedicated to Public Service • Ward 26 (Madhopur - Betiyahata)",
+        tag: "Dedicated to Public Service • Ward 26 (Betiyahata)",
         h1Line1: "Against Injustice,",
         h1Line2: "With the People.",
         h2: "Corporator Vishwajeet Tripathi 'Sonu'",
-        p: "A fearless voice against civic irregularities, dedicated to the prompt resolution of grassroots challenges in Ward 26 (Madhopur - Betiyahata) and safeguarding citizens' rights and dignity.",
+        p: "A fearless voice against civic irregularities, dedicated to the prompt resolution of grassroots challenges in Ward 26 (Betiyahata) and safeguarding citizens' rights and dignity.",
         cta1: "View Development Works",
         cta2: "Submit Grievance / Suggestion",
         fbVerified: "15,000+ Active Followers & Citizens Connected",
@@ -385,10 +380,10 @@ export default function HomePage() {
         tag: "Personal Biography & Vision",
         title: "Rooted in Gorakhpur, Dedicated to Public Service",
         nameFull: "Vishwajeet Tripathi (Sonu Tiwari)",
-        roleTag: "Corporator, Ward 26 (Madhopur - Betiyahata)",
-        p1: "Born and raised in the historic neighbourhoods of Betiyahata and Madhopur in Gorakhpur, Vishwajeet Tripathi aka 'Sonu' has been at the forefront of social justice, public grievance redressal, and standing up against unfair practices since his student years.",
+        roleTag: "Corporator, Ward 26 (Betiyahata)",
+        p1: "Born and raised in the historic neighbourhood of Betiyahata in Gorakhpur, Vishwajeet Tripathi aka 'Sonu' has been at the forefront of social justice, public grievance redressal, and standing up against unfair practices since his student years.",
         p2: "He completed his education from the renowned M.G. Inter College Gorakhpur and pursued higher studies at Deen Dayal Upadhyaya Gorakhpur University (D.D.U.). Since his youth, he has remained actively engaged in community welfare and civic development.",
-        p3: "As the elected Corporator for Ward 26 (Madhopur - Betiyahata), he works with complete dedication—focusing purely on citizen welfare, flood relief, sanitation, street lighting, and transparent governance.",
+        p3: "As the elected Corporator for Ward 26 (Betiyahata), he works with complete dedication—focusing purely on citizen welfare, flood relief, sanitation, street lighting, and transparent governance.",
         eduLabel: "Alma Mater:",
         eduValue: "M.G. Inter College & D.D.U. Gorakhpur University",
         ideologyLabel: "Working Ethos:",
@@ -407,12 +402,12 @@ export default function HomePage() {
         w1Status: "Sanctioned & In Progress",
         w1Budget: "Budget: ₹2.24 Cr",
         w1Title: "Harir Prasad Dubey Marg & Amrit Sarovar Project",
-        w1Desc: "Widening of key connector road linking Madhopur and Betiyahata, interlocking tiles, RCC storm-water drain, and ecological restoration of Amrit Sarovar.",
+        w1Desc: "Widening of key connector road in Betiyahata, interlocking tiles, RCC storm-water drain, and ecological restoration of Amrit Sarovar.",
         w1Note: "Direct monitoring of build quality & timeline",
         w2Status: "Ground Execution",
         w2Tag: "Ward 26",
         w2Title: "Drainage Network & Waterlogging Prevention",
-        w2Desc: "Desilting of major drains in Betiyahata & Madhopur, heavy-duty covers installation, and pre-monsoon storm-water channels.",
+        w2Desc: "Desilting of major drains in Betiyahata, heavy-duty covers installation, and pre-monsoon storm-water channels.",
         w2Note: "Action within 24 hours of citizen report",
         w3Status: "Ongoing Campaign",
         w3Tag: "Public Health",
@@ -427,7 +422,7 @@ export default function HomePage() {
       media: {
         tag: "In National & Regional Press",
         title: "Headlines in Leading Daily Newspapers",
-        sub: "Original newspaper clippings and verified reports published across Amar Ujala, Dainik Jagran, Hindustan, Dainik Bhaskar & Rashtriya Sahara",
+        sub: "Original newspaper clippings and verified reports published across Amar Ujala, Dainik Jagran, Hindustan, दैनिक भास्कर व राष्ट्रीय सहारा",
         viewClipping: "View",
         readStory: "View Details",
       },
@@ -441,17 +436,17 @@ export default function HomePage() {
       contact: {
         tag: "Public Redressal & Office",
         title: "Public Hearing & Contact Portal",
-        sub: "Prompt resolution for every citizen of Madhopur and Betiyahata is our prime commitment",
+        sub: "Prompt resolution for every citizen of Betiyahata is our prime commitment",
         officeHeading: "Corporator Office Details",
         addressLabel: "Office Address:",
-        addressValue: "Ward 26 (Madhopur - Betiyahata), Nagar Nigam Gorakhpur, UP - 273001",
+        addressValue: "Ward 26 (Betiyahata), Nagar Nigam Gorakhpur, UP - 273001",
         timingsLabel: "Public Hearing Hours:",
         timingsValue: "Daily 08:00 AM to 10:00 AM (Direct meeting at office)",
         fbLabel: "Official Facebook:",
         emergencyTitle: "Drainage or Emergency Grievance?",
         emergencyDesc: "For sewer blockages, drain overflows, or streetlight hazards, submit this form and instantly message on WhatsApp.",
         formHeading: "Register Your Grievance / Suggestion",
-        formSub: "This form automatically formats a professional draft that you can copy or send directly via WhatsApp.",
+        formSub: "This form automatically formats a professional draft that you can send directly via WhatsApp.",
         nameLabel: "Your Full Name *",
         namePlaceholder: "e.g., Amit Tripathi",
         phoneLabel: "Mobile Number *",
@@ -460,14 +455,11 @@ export default function HomePage() {
         categoryLabel: "Category of Issue *",
         problemLabel: "Detailed Description *",
         problemPlaceholder: "Please describe the issue, exact landmark, and requested action...",
-        btnCopy: "Copy Message Draft",
-        btnCopied: "Draft Copied!",
         btnWhatsapp: "Send via WhatsApp",
-        copySuccess: "✓ Your grievance draft has been copied to clipboard. You can paste and share it anywhere.",
       },
       footer: {
         title: "Vishwajeet Tripathi 'Sonu'",
-        role: "Corporator - Ward 26 (Madhopur - Betiyahata), Nagar Nigam Gorakhpur (UP)",
+        role: "Corporator - Ward 26 (Betiyahata), Nagar Nigam Gorakhpur (UP)",
         tagline: "Against Injustice, With the People • Comprehensive Development of Gorakhpur",
         copyright: "© 2025-2026 Office of Vishwajeet Tripathi (Sonu Tiwari). All Rights Reserved.",
         city: "Nagar Nigam Gorakhpur • Assembly 322",
@@ -477,26 +469,8 @@ export default function HomePage() {
 
   const curr = t[lang];
 
-  const handleCopyMessage = () => {
-    const textToCopy = `🚩 *GRIEVANCE REGISTRATION - WARD 26 OFFICE* 🚩
-━━━━━━━━━━━━━━━━━━━━━━
-👤 *Citizen Name:* ${formData.name || (lang === 'hi' ? 'नागरिक' : 'Citizen')}
-📞 *Contact Phone:* ${formData.phone || 'N/A'}
-📍 *Area / Mohalla:* ${formData.mohalla}
-📌 *Issue Category:* ${formData.category}
-
-📝 *Description:*
-${formData.problem || (lang === 'hi' ? 'वार्ड 26 माधोपुर-बेतियाहाता क्षेत्र में त्वरित सुधार हेतु अनुरोध।' : 'Urgent civic assistance requested in Ward 26.')}
-━━━━━━━━━━━━━━━━━━━━━━
-To: Vishwajeet Tripathi 'Sonu' (Corporator, Nagar Nigam Gorakhpur)`;
-
-    navigator.clipboard.writeText(textToCopy);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
-  };
-
   const handleWhatsAppSend = () => {
-    const message = `🚩 *GRIEVANCE - WARD 26 (MADHOPUR - BETIYAHATA)* 🚩
+    const message = `🚩 *GRIEVANCE - WARD 26 (BETIYAHATA)* 🚩
 Name: ${formData.name || 'Citizen'}
 Phone: ${formData.phone || ''}
 Area: ${formData.mohalla}
@@ -1268,7 +1242,6 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 26.'}`;
                       className="w-full bg-slate-50 border border-slate-300 rounded-xl p-3 text-sm text-slate-900 focus:bg-white focus:border-brandRed-600 focus:outline-none focus:ring-1 focus:ring-brandRed-600"
                     >
                       <option value="बेतियाहाता (Betiyahata)">बेतियाहाता (Betiyahata)</option>
-                      <option value="माधोपुर (Madhopur)">माधोपुर (Madhopur)</option>
                       <option value="हरीर प्रसाद दुबे मार्ग (Harir Dubey Marg)">हरीर प्रसाद दुबे मार्ग (Harir Dubey Marg)</option>
                       <option value="प्रेमचंद पार्क / बोधघाट (Premchand Park)">प्रेमचंद पार्क / बोधघाट (Premchand Park)</option>
                       <option value="मोहद्दीपुर क्षेत्र (Mohaddipur Area)">मोहद्दीपुर क्षेत्र (Mohaddipur Area)</option>
@@ -1309,40 +1282,16 @@ Details: ${formData.problem || 'Civic assistance needed in Ward 26.'}`;
                 </div>
 
                 {/* Buttons */}
-                <div className="pt-2 flex flex-wrap items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={handleCopyMessage}
-                    className="flex-1 bg-slate-900 hover:bg-slate-800 text-white py-3.5 px-4 rounded-xl font-bold text-sm shadow flex items-center justify-center gap-2 transition-all active:scale-95"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="w-4 h-4 text-green-400" />
-                        <span>{curr.contact.btnCopied}</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4 text-amber-400" />
-                        <span>{curr.contact.btnCopy}</span>
-                      </>
-                    )}
-                  </button>
-
+                <div className="pt-2">
                   <button
                     type="button"
                     onClick={handleWhatsAppSend}
-                    className="flex-1 bg-brandGreen-600 hover:bg-brandGreen-700 text-white py-3.5 px-4 rounded-xl font-bold text-sm shadow flex items-center justify-center gap-2 transition-all active:scale-95"
+                    className="w-full bg-brandGreen-600 hover:bg-brandGreen-700 text-white py-3.5 px-4 rounded-xl font-bold text-sm shadow flex items-center justify-center gap-2 transition-all active:scale-95 cursor-pointer"
                   >
                     <Send className="w-4 h-4" />
                     <span>{curr.contact.btnWhatsapp}</span>
                   </button>
                 </div>
-
-                {copied && (
-                  <div className="bg-green-50 border border-green-200 text-green-800 p-3 rounded-xl text-xs font-medium text-center">
-                    {curr.contact.copySuccess}
-                  </div>
-                )}
               </div>
             </div>
           </div>

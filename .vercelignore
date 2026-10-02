@@ -1,0 +1,6 @@
+assets/videos/
+*.mp4
+.git/
+node_modules/
+.next/
+out/

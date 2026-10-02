@@ -116,7 +116,7 @@ export default function MediaPage() {
             <span className="hidden sm:inline text-slate-600">|</span>
             <span className="hidden sm:flex items-center gap-1 text-slate-300">
               <MapPin className="w-3 h-3 text-brandRed-400" />
-              {lang === 'hi' ? 'वार्ड 26 माधोपुर-बेतियाहाता, नगर निगम गोरखपुर' : 'Ward 26 Madhopur-Betiyahata, Gorakhpur'}
+              {lang === 'hi' ? 'वार्ड 26 बेतियाहाता, नगर निगम गोरखपुर' : 'Ward 26 Betiyahata, Gorakhpur'}
             </span>
           </div>
           <div className="flex items-center gap-4">
@@ -652,8 +652,8 @@ export default function MediaPage() {
               </p>
               <p className="text-slate-500 mt-1">
                 {lang === 'hi'
-                  ? 'पार्षद - वार्ड 26 (माधोपुर-बेतियाहाता), नगर निगम गोरखपुर, उत्तर प्रदेश'
-                  : 'Corporator - Ward 26 (Madhopur-Betiyahata), Nagar Nigam Gorakhpur, UP'}
+                  ? 'पार्षद - वार्ड 26 (बेतियाहाता), नगर निगम गोरखपुर, उत्तर प्रदेश'
+                  : 'Corporator - Ward 26 (Betiyahata), Nagar Nigam Gorakhpur, UP'}
               </p>
             </div>
             <div className="flex items-center gap-6 font-semibold">

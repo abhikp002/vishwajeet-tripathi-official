@@ -91,7 +91,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     categoryKey: 'drainage',
     dateHi: 'अखबार आर्काइव साक्ष्य',
     dateEn: 'Press Archive Evidence',
-    descHi: 'सत्याग्रह के बाद नगर निगम प्रशासन द्वारा बेतियाहाता और माधोपुर क्षेत्र में जल-निकासी के लिए व्यापक ड्रेनेज व नाला निर्माण कार्ययोजना को मंजूरी दी गई।',
+    descHi: 'सत्याग्रह के बाद नगर निगम प्रशासन द्वारा बेतियाहाता क्षेत्र में जल-निकासी के लिए व्यापक ड्रेनेज व नाला निर्माण कार्ययोजना को मंजूरी दी गई।',
     descEn: 'Following persistent civic protests, the municipal corporation formally approved comprehensive drainage construction and desilting plans for the ward.',
   },
   {
@@ -117,7 +117,7 @@ const GALLERY_ITEMS: GalleryItem[] = [
     categoryKey: 'clipping',
     dateHi: 'लागत: ₹2.24 करोड़',
     dateEn: 'Sanction: ₹2.24 Cr',
-    descHi: 'लंबे संघर्ष के बाद माधोपुर और बेतियाहाता को जोड़ने वाले ₹2.24 करोड़ के हरीर प्रसाद दुबे मार्ग का नवनिर्माण तथा अमृत सरोवर का समग्र सौंदर्यीकरण स्वीकृत कराया गया।',
+    descHi: 'लंबे संघर्ष के बाद बेतियाहाता क्षेत्र के ₹2.24 करोड़ के हरीर प्रसाद दुबे मार्ग का नवनिर्माण तथा अमृत सरोवर का समग्र सौंदर्यीकरण स्वीकृत कराया गया।',
     descEn: 'Securing project approval and budget sanction of ₹2.24 Crores for the widening, drainage construction, and beautification of Harir Prasad Dubey Marg and Amrit Sarovar.',
   },
 ];
@@ -164,8 +164,8 @@ export default function GalleryPage() {
             <span className="inline-block w-2.5 h-2.5 rounded-full bg-brandRed-500 animate-pulse"></span>
             <span>
               {lang === 'hi'
-                ? 'माधोपुर - बेतियाहाता - शहर विधानसभा 322, गोरखपुर | '
-                : 'Madhopur - Betiyahata - Assembly 322, Gorakhpur | '}
+                ? 'बेतियाहाता - शहर विधानसभा 322, गोरखपुर | '
+                : 'Betiyahata - Assembly 322, Gorakhpur | '}
               <span className="text-amber-400 font-semibold">
                 {lang === 'hi' ? 'जन-सुनवाई: प्रतिदिन प्रातः 8:00 से 10:00 बजे' : 'Public Hearing: Daily 8:00 AM to 10:00 AM'}
               </span>
@@ -220,8 +220,8 @@ export default function GalleryPage() {
               </div>
               <p className="text-[11px] text-slate-500 font-medium">
                 {lang === 'hi'
-                  ? 'नगर निगम गोरखपुर • माधोपुर - बेतियाहाता'
-                  : 'Nagar Nigam Gorakhpur • Madhopur - Betiyahata'}
+                  ? 'नगर निगम गोरखपुर • बेतियाहाता'
+                  : 'Nagar Nigam Gorakhpur • Betiyahata'}
               </p>
             </div>
           </Link>
@@ -573,8 +573,8 @@ export default function GalleryPage() {
               </div>
               <p className="text-sm text-slate-300">
                 {lang === 'hi'
-                  ? 'पार्षद - वार्ड 26 (माधोपुर - बेतियाहाता), नगर निगम गोरखपुर (उ.प्र.)'
-                  : 'Corporator - Ward 26 (Madhopur - Betiyahata), Nagar Nigam Gorakhpur (UP)'}
+                  ? 'पार्षद - वार्ड 26 (बेतियाहाता), नगर निगम गोरखपुर (उ.प्र.)'
+                  : 'Corporator - Ward 26 (Betiyahata), Nagar Nigam Gorakhpur (UP)'}
               </p>
               <div className="text-xs text-amber-400 font-semibold">
                 {lang === 'hi'
